@@ -1,0 +1,37 @@
+version: 0.2
+
+phases:
+    install:
+        commands:
+            - echo Executing Install Phase
+            - python -m pip install --upgrade pip
+            - python -m pip install -r requirements.txt
+            - python -m pip install -r test-requirements.txt
+            
+    pre_build:
+        commands:
+            - echo Executing Pre Build Phase
+            - aws --version
+            - echo Logging in..
+            - docker login -u=tayyab80 -p=Pakistan123
+
+    build:
+        commands:
+            - echo Executing Build Phase
+            - echo Build started on `date`
+            - "docker build --tag tayyab80/emumba:v1 ."
+            - "docker tag tayyab80/emumba:v1 tayyab80/emumba:v1"
+            - docker-compose pull && docker-compose up -d
+            - echo Running unittest..
+            - python -m unittest discover tests
+
+    post_build:
+        commands:
+            - echo Executing Post Build Phase
+            - "docker push tayyab80/emumba:v1"
+            - echo Build completed on `date`
+
+artifacts:
+    files:
+        - appspec.yml
+        - "**/*"
