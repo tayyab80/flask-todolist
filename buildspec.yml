@@ -13,7 +13,7 @@ phases:
             - echo Executing Pre Build Phase
             - aws --version
             - echo Logging in..
-            - docker login -u=tayyab80 -p=Pakistan123
+            - docker login -u=tayyab80 --password-stdin
 
     build:
         commands:
